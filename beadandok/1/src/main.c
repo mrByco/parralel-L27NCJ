@@ -2,9 +2,18 @@
 #include <stdlib.h>
 #include <math.h>
 #include <pthread.h>
+#include <time.h>
 
-#define MAX_THREADS 32
+#define MAX_THREADS 13
 #define M_PI 3.141593
+
+typedef struct Results
+{
+    int start;
+    int init_finish;
+    int blur_finish;
+    int end;
+};
 
 // structure for passing parameters to threads
 typedef struct
@@ -18,19 +27,30 @@ typedef struct
     float *output;
 } thread_args_t;
 
+long long current_timestamp_ms()
+{
+    struct timespec spec;
+    clock_gettime(CLOCK_REALTIME, &spec);
+    return spec.tv_sec * 1000LL + spec.tv_nsec / 1000000LL;
+}
+
 // function to compute the Gaussian kernel
 void compute_kernel(float *kernel, int radius)
 {
+    int kernel_diameter = radius * 2 + 1;
     float sigma = radius / 3.0f;
     float s = 2.0f * sigma * sigma;
     float sum = 0.0f;
     for (int i = -radius; i <= radius; i++)
     {
-        float r = (float)i;
-        kernel[i + radius] = expf(-r * r / s) / sqrtf(M_PI * s);
-        sum += kernel[i + radius];
+        for (int j = -radius; j <= radius; j++)
+        {
+            float r = sqrtf((float)(i * i + j * j));
+            kernel[(i + radius) * kernel_diameter + (j + radius)] = expf(-r * r / s) / sqrtf(M_PI * s);
+            sum += kernel[(i + radius) * kernel_diameter + (j + radius)];
+        }
     }
-    for (int i = 0; i <= 2 * radius; i++)
+    for (int i = 0; i < kernel_diameter * kernel_diameter; i++)
     {
         kernel[i] /= sum;
     }
@@ -39,6 +59,8 @@ void compute_kernel(float *kernel, int radius)
 // function to apply the Gaussian blur to a range of pixels
 void *blur_range(void *arg)
 {
+    // printf("Thread %ld\n", pthread_self());
+    //  printf("start, stop: %d, %d\n", ((thread_args_t *)arg)->start, ((thread_args_t *)arg)->end);
     thread_args_t *args = (thread_args_t *)arg;
     float *input = args->input;
     float *output = args->output;
@@ -47,22 +69,40 @@ void *blur_range(void *arg)
     int radius = args->radius;
     int start = args->start;
     int end = args->end;
-    float kernel[MAX_THREADS];
+    float kernel[(radius * 2 + 1) * (radius * 2 + 1)];
+
     compute_kernel(kernel, radius);
+
+    // printf kernel 2d
+    /*printf("Kernel 2D: \n");
+    for (int i = 0; i < (radius * 2 + 1); i++)
+    {
+        for (int j = 0; j < (radius * 2 + 1); j++)
+        {
+            printf("%.4f ", kernel[i * (radius * 2 + 1) + j]);
+        }
+        printf("\n");
+    }*/
+
     for (int y = start; y < end; y++)
     {
         for (int x = 0; x < width; x++)
         {
             float sum = 0.0f;
-            for (int i = -radius; i <= radius; i++)
+
+            for (int ky = -radius; ky <= radius; ky++)
             {
-                int px = x + i;
-                if (px < 0)
-                    px = 0;
-                if (px >= width)
-                    px = width - 1;
-                sum += kernel[i + radius] * input[y * width + px];
+                for (int kx = -radius; kx <= radius; kx++)
+                {
+                    int nky = y + ky;
+                    int nkx = x + kx;
+                    if (nky >= 0 && nky < height && nkx >= 0 && nkx < width)
+                    {
+                        sum += input[nky * width + nkx] * kernel[(ky + radius) * (radius * 2 + 1) + (kx + radius)];
+                    }
+                }
             }
+
             output[y * width + x] = sum;
         }
     }
@@ -85,6 +125,7 @@ void blur_image(float *input, float *output, int width, int height, int radius, 
         args[i].radius = radius;
         args[i].input = input;
         args[i].output = output;
+
         pthread_create(&threads[i], NULL, blur_range, &args[i]);
     }
     for (int i = 0; i < num_threads; i++)
@@ -96,6 +137,9 @@ void blur_image(float *input, float *output, int width, int height, int radius, 
 // example usage
 int main()
 {
+    float clocks_per_ms = CLOCKS_PER_SEC / 1000;
+    clock_t startTime = current_timestamp_ms();
+
     // assume we have an input image of size 640x480
     int width = 640;
     int height = 480;
@@ -110,16 +154,23 @@ int main()
         }
     }
     // apply the Gaussian blur using 4 threads and a radius of 5
-    int radius = 5;
-    int num_threads = 4;
+    int radius = 1;
+    int num_threads = MAX_THREADS;
+
     blur_image(input, output, width, height, radius, num_threads);
+    clock_t endTime = current_timestamp_ms();
 
     // save the output image
     FILE *fout = fopen("output.raw", "wb");
     fwrite(output, sizeof(float), width * height, fout);
     fclose(fout);
+
     // free memory
     free(input);
     free(output);
+
+    printf("Start, end: %ld, %ld\n", startTime, endTime);
+    printf("Time: %ldms\n", (endTime - startTime));
+
     return 0;
 }
