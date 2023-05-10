@@ -3,6 +3,7 @@
 #include <math.h>
 #include <pthread.h>
 #include <time.h>
+#include <windows.h>
 
 #define MAX_THREADS 13
 #define M_PI 3.141593
@@ -27,11 +28,30 @@ typedef struct
     float *output;
 } thread_args_t;
 
+/*
+Works only on unix systems
 long long current_timestamp_ms()
 {
     struct timespec spec;
     clock_gettime(CLOCK_REALTIME, &spec);
     return spec.tv_sec * 1000LL + spec.tv_nsec / 1000000LL;
+}*/
+
+// Windows implementation of current_timestamp_ms()
+
+long long current_timestamp_ms()
+{
+    FILETIME ft;
+    GetSystemTimeAsFileTime(&ft);
+
+    ULARGE_INTEGER timestamp;
+    timestamp.LowPart = ft.dwLowDateTime;
+    timestamp.HighPart = ft.dwHighDateTime;
+
+    long long milliseconds = timestamp.QuadPart / 10000LL;
+    milliseconds -= 11644473600000LL; // convert from Windows epoch to Unix epoch
+
+    return milliseconds;
 }
 
 // function to compute the Gaussian kernel

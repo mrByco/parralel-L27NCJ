@@ -1,0 +1,15 @@
+D:\Documents\parralel-L27NCJ\beadandok\3\GuassianBlur\bin\Debug\net6.0\GuassianBlur.exe
+D:\Documents\parralel-L27NCJ\beadandok\3\GuassianBlur\bin\Debug\net6.0\GuassianBlur.deps.json
+D:\Documents\parralel-L27NCJ\beadandok\3\GuassianBlur\bin\Debug\net6.0\GuassianBlur.runtimeconfig.json
+D:\Documents\parralel-L27NCJ\beadandok\3\GuassianBlur\bin\Debug\net6.0\GuassianBlur.dll
+D:\Documents\parralel-L27NCJ\beadandok\3\GuassianBlur\bin\Debug\net6.0\GuassianBlur.pdb
+D:\Documents\parralel-L27NCJ\beadandok\3\GuassianBlur\obj\Debug\net6.0\GuassianBlur.csproj.AssemblyReference.cache
+D:\Documents\parralel-L27NCJ\beadandok\3\GuassianBlur\obj\Debug\net6.0\GuassianBlur.GeneratedMSBuildEditorConfig.editorconfig
+D:\Documents\parralel-L27NCJ\beadandok\3\GuassianBlur\obj\Debug\net6.0\GuassianBlur.AssemblyInfoInputs.cache
+D:\Documents\parralel-L27NCJ\beadandok\3\GuassianBlur\obj\Debug\net6.0\GuassianBlur.AssemblyInfo.cs
+D:\Documents\parralel-L27NCJ\beadandok\3\GuassianBlur\obj\Debug\net6.0\GuassianBlur.csproj.CoreCompileInputs.cache
+D:\Documents\parralel-L27NCJ\beadandok\3\GuassianBlur\obj\Debug\net6.0\GuassianBlur.dll
+D:\Documents\parralel-L27NCJ\beadandok\3\GuassianBlur\obj\Debug\net6.0\refint\GuassianBlur.dll
+D:\Documents\parralel-L27NCJ\beadandok\3\GuassianBlur\obj\Debug\net6.0\GuassianBlur.pdb
+D:\Documents\parralel-L27NCJ\beadandok\3\GuassianBlur\obj\Debug\net6.0\GuassianBlur.genruntimeconfig.cache
+D:\Documents\parralel-L27NCJ\beadandok\3\GuassianBlur\obj\Debug\net6.0\ref\GuassianBlur.dll
