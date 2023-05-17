@@ -3,7 +3,7 @@
 Paraméterezhető Gaussian blur algoritmus megvalsósítva 3 fajta technológiával. Mindegyik programban lesz beépített időmérés így az egyes technológiákat össze lehet hasonlítani.
 
 
-Az algoritmus 640x480 as mérető random generált fekete fehér képpel dolgozik. A (látványos) tesztelés érdekében a lementett nyers raw-file áthonvertálható az ffmpeg könyvtár segítségével png-re.
+Az algoritmus 640x480 as méretű random generált fekete fehér képpel dolgozik. A (látványos) tesztelés érdekében a lementett nyers raw-file áthonvertálható az ffmpeg könyvtár segítségével png-re.
 
 Mindegyik beadandóhoz tartozik egy run.sh script a beadandó könyvtárában, ez lefordítja a programot, futtatja majd a kapott képet png-re konvertálja.
 
