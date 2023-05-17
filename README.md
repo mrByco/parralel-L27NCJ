@@ -27,7 +27,7 @@ C# Threading.
 
 Futtatási eredmények grafikonon, külömböző probléma méret esetén
 
-!radius1(https://github.com/mrByco/parralel-L27NCJ/blob/master/beadandok/ResultImages/r1.png?raw=true)
-!radius3(https://github.com/mrByco/parralel-L27NCJ/blob/master/beadandok/ResultImages/r3.png?raw=true)
-!radius7(https://github.com/mrByco/parralel-L27NCJ/blob/master/beadandok/ResultImages/r7.png?raw=true)
-!radius20(https://github.com/mrByco/parralel-L27NCJ/blob/master/beadandok/ResultImages/r20.png?raw=true)
+![radius1](https://github.com/mrByco/parralel-L27NCJ/blob/master/beadandok/ResultImages/r1.png?raw=true)
+![radius3](https://github.com/mrByco/parralel-L27NCJ/blob/master/beadandok/ResultImages/r3.png?raw=true)
+![radius7](https://github.com/mrByco/parralel-L27NCJ/blob/master/beadandok/ResultImages/r7.png?raw=true)
+![radius20](https://github.com/mrByco/parralel-L27NCJ/blob/master/beadandok/ResultImages/r20.png?raw=true)
