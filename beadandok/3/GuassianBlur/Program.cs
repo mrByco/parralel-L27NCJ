@@ -6,37 +6,14 @@ using static System.Net.WebRequestMethods;
 using System.Net.NetworkInformation;
 using System.Net;
 using System.Xml.Linq;
+using GuassianBlur;
 
 namespace GaussianBlur
 {
-    class Results
-    {
-        public int start;
-        public int init_finish;
-        public int blur_finish;
-        public int end;
-    }
-
-    class ThreadArgs
-    {
-        public int Start { get; set; }
-        public int End { get; set; }
-        public int Width { get; set; }
-        public int Height { get; set; }
-        public int Radius { get; set; }
-        public float[] Input { get; set; }
-        public float[] Output { get; set; }
-    }
-
-
     class Program
     {
+        const int MAX_THREADS = 13;
 
-
-        static long CurrentTimestampMs()
-        {
-            return DateTime.UtcNow.Ticks / TimeSpan.TicksPerMillisecond;
-        }
         // function to compute the Gaussian kernel
         static void ComputeKernel(float[] kernel, int radius)
         {
@@ -49,7 +26,7 @@ namespace GaussianBlur
                 for (int j = -radius; j <= radius; j++)
                 {
                     float r = (float)Math.Sqrt(i * i + j * j);
-                    kernel[(i + radius) * kernelDiameter + (j + radius)] = (float)Math.Exp(-r * r / s) / (float)Math.Sqrt(M_PI * s);
+                    kernel[(i + radius) * kernelDiameter + (j + radius)] = (float)Math.Exp(-r * r / s) / (float)Math.Sqrt(Math.PI * s);
                     sum += kernel[(i + radius) * kernelDiameter + (j + radius)];
                 }
             }
@@ -58,9 +35,6 @@ namespace GaussianBlur
                 kernel[i] /= sum;
             }
         }
-        
-        const int MAX_THREADS = 13;
-        const float M_PI = 3.141593f;
 
         static void Main(string[] args)
         {
@@ -102,16 +76,10 @@ namespace GaussianBlur
                     handle.Free();
                 }
             }
-
-            // free memory
-            Marshal.FreeHGlobal(Marshal.UnsafeAddrOfPinnedArrayElement(input, 0));
-            Marshal.FreeHGlobal(Marshal.UnsafeAddrOfPinnedArrayElement(output, 0));
         }
         
         static void BlurRange(object arg)
         {
-            // Console.WriteLine("Thread {0}", Thread.CurrentThread.ManagedThreadId);
-            // Console.WriteLine("start, stop: {0}, {1}", ((thread_args_t)arg).start, ((thread_args_t)arg).end);
             ThreadArgs args = (ThreadArgs)arg;
             float[] input = args.Input;
             float[] output = args.Output;
@@ -122,16 +90,6 @@ namespace GaussianBlur
             int end = args.End;
             float[] kernel = new float[(radius * 2 + 1) * (radius * 2 + 1)];
             ComputeKernel(kernel, radius);
-
-            // Console.WriteLine("Kernel 2D: ");
-            /*for (int i = 0; i < (radius * 2 + 1); i++)
-            {
-                for (int j = 0; j < (radius * 2 + 1); j++)
-                {
-                    Console.Write("{0} ", kernel[i * (radius * 2 + 1) + j]);
-                }
-                Console.WriteLine();
-            }*/
 
             for (int y = start; y < end; y++)
             {
@@ -155,7 +113,6 @@ namespace GaussianBlur
                     output[y * width + x] = sum;
                 }
             }
-            // Thread.CurrentThread.Abort();
         }
 
         static void BlurImage(float[] input, float[] output, int width, int height, int radius, int numThreads)
@@ -185,6 +142,11 @@ namespace GaussianBlur
             {
                 threads[i].Join();
             }
+        }
+
+        static long CurrentTimestampMs()
+        {
+            return DateTime.UtcNow.Ticks / TimeSpan.TicksPerMillisecond;
         }
     }
 }
