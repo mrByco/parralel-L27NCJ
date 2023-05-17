@@ -12,7 +12,6 @@ namespace GaussianBlur
 {
     class Program
     {
-        const int MAX_THREADS = 13;
 
         // function to compute the Gaussian kernel
         static void ComputeKernel(float[] kernel, int radius)
@@ -38,28 +37,32 @@ namespace GaussianBlur
 
         static void Main(string[] args)
         {
+            if (args.Length < 2)
+            {
+                Console.WriteLine("Usage: ExeName <radius> <numThreads>");
+                return;
+            }
+
+            int radius = int.Parse(args[0]);
+            int numThreads = int.Parse(args[1]);
+
             long startTime = CurrentTimestampMs();
 
-            // assume we have an input image of size 640x480
             int width = 640;
             int height = 480;
             float[] input = new float[width * height];
             float[] output = new float[width * height];
 
-            // initialize input with random values
             Random rand = new Random();
             for (int i = 0; i < width * height; i++)
             {
                 input[i] = (float)rand.NextDouble();
             }
 
-            // apply Gaussian blur with 8 threads and a radius of 5
-            int radius = 5;
-            int numThreads = MAX_THREADS;
             BlurImage(input, output, width, height, radius, numThreads);
 
             long endTime = CurrentTimestampMs();
-            Console.WriteLine("Total time: {0} ms", endTime - startTime);
+            Console.WriteLine("{0}", endTime - startTime);
 
             using (FileStream fs = new FileStream("output.raw", FileMode.Create))
             {
@@ -77,7 +80,7 @@ namespace GaussianBlur
                 }
             }
         }
-        
+
         static void BlurRange(object arg)
         {
             ThreadArgs args = (ThreadArgs)arg;
@@ -117,8 +120,8 @@ namespace GaussianBlur
 
         static void BlurImage(float[] input, float[] output, int width, int height, int radius, int numThreads)
         {
-            Thread[] threads = new Thread[MAX_THREADS];
-            ThreadArgs[] args = new ThreadArgs[MAX_THREADS];
+            Thread[] threads = new Thread[numThreads];
+            ThreadArgs[] args = new ThreadArgs[numThreads];
             int chunkSize = height / numThreads;
 
             for (int i = 0; i < numThreads; i++)
@@ -151,4 +154,4 @@ namespace GaussianBlur
     }
 }
 
-        
+

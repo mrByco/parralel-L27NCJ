@@ -5,7 +5,6 @@
 #include <time.h>
 #include <windows.h>
 
-#define MAX_THREADS 13
 #define M_PI 3.141593
 
 typedef struct Results
@@ -76,11 +75,8 @@ void compute_kernel(float *kernel, int radius)
     }
 }
 
-// function to apply the Gaussian blur to a range of pixels
 void *blur_range(void *arg)
 {
-    // printf("Thread %ld\n", pthread_self());
-    //  printf("start, stop: %d, %d\n", ((thread_args_t *)arg)->start, ((thread_args_t *)arg)->end);
     thread_args_t *args = (thread_args_t *)arg;
     float *input = args->input;
     float *output = args->output;
@@ -92,17 +88,6 @@ void *blur_range(void *arg)
     float kernel[(radius * 2 + 1) * (radius * 2 + 1)];
 
     compute_kernel(kernel, radius);
-
-    // printf kernel 2d
-    /*printf("Kernel 2D: \n");
-    for (int i = 0; i < (radius * 2 + 1); i++)
-    {
-        for (int j = 0; j < (radius * 2 + 1); j++)
-        {
-            printf("%.4f ", kernel[i * (radius * 2 + 1) + j]);
-        }
-        printf("\n");
-    }*/
 
     for (int y = start; y < end; y++)
     {
@@ -129,12 +114,11 @@ void *blur_range(void *arg)
     pthread_exit(NULL);
 }
 
-// function to apply the Gaussian blur using multiple threads
 void blur_image(float *input, float *output, int width, int height, int radius, int num_threads)
 {
 
-    pthread_t threads[MAX_THREADS];
-    thread_args_t args[MAX_THREADS];
+    pthread_t threads[num_threads];
+    thread_args_t args[num_threads];
     int chunk_size = height / num_threads;
     for (int i = 0; i < num_threads; i++)
     {
@@ -154,18 +138,25 @@ void blur_image(float *input, float *output, int width, int height, int radius, 
     }
 }
 
-// example usage
-int main()
+int main(int argc, char *argv[])
 {
+    if (argc < 3)
+    {
+        printf("Usage: %s <radius> <num_threads>\n", argv[0]);
+        return 1;
+    }
+
+    int radius = atoi(argv[1]);
+    int num_threads = atoi(argv[2]);
+
     float clocks_per_ms = CLOCKS_PER_SEC / 1000;
     clock_t startTime = current_timestamp_ms();
 
-    // assume we have an input image of size 640x480
     int width = 640;
     int height = 480;
     float *input = (float *)malloc(width * height * sizeof(float));
     float *output = (float *)malloc(width * height * sizeof(float));
-    // initialize the input image
+
     for (int y = 0; y < height; y++)
     {
         for (int x = 0; x < width; x++)
@@ -173,24 +164,18 @@ int main()
             input[y * width + x] = (float)rand() / (float)RAND_MAX;
         }
     }
-    // apply the Gaussian blur using 4 threads and a radius of 5
-    int radius = 1;
-    int num_threads = MAX_THREADS;
 
     blur_image(input, output, width, height, radius, num_threads);
     clock_t endTime = current_timestamp_ms();
+    printf("%ld", (endTime - startTime));
+    return 0;
 
-    // save the output image
     FILE *fout = fopen("output.raw", "wb");
     fwrite(output, sizeof(float), width * height, fout);
     fclose(fout);
 
-    // free memory
     free(input);
     free(output);
-
-    printf("Start, end: %ld, %ld\n", startTime, endTime);
-    printf("Time: %ldms\n", (endTime - startTime));
 
     return 0;
 }
