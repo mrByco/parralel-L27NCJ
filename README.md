@@ -18,7 +18,7 @@ A guassian blur egyik tulajdonsága az algalmazott kernel mérete, ennek a sugar
 
 # Párhuzamosítás
 
-A képet vízszintes szeletekre bontva tudnak a szálak párhuzamosan dolgozni a képen. A szálak az eredményt a 2 dimenziós output float tömb szeparált részeire írják így írásnál nem lehet üzközés.
+A képet vízszintes szeletekre bontva tudnak a szálak párhuzamosan dolgozni a képen. A szálak az eredményt a 2 dimenziós output float tömb szeparált részeire írják így írásnál nem lehet ütközés.
 
 # Választott technológia
 C# Threading.
