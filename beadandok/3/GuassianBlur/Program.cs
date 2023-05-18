@@ -13,7 +13,6 @@ namespace GaussianBlur
     class Program
     {
 
-        // function to compute the Gaussian kernel
         static void ComputeKernel(float[] kernel, int radius)
         {
             int kernelDiameter = radius * 2 + 1;
