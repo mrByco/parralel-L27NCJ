@@ -1,16 +1,16 @@
 ## Parallel Biszterszky Mátyás L27NCJ
 
-Paraméterezhető Gaussian blur algoritmus megvalsósítva 3 fajta technológiával. Mindegyik programban lesz beépített időmérés így az egyes technológiákat össze lehet hasonlítani.
+Paraméterezhető Gauss szűrő algoritmus megvalsósítva 4 fajta technológiával. Mindegyik programban lesz beépített időmérés így az egyes technológiákat össze lehet hasonlítani.
 
 
-Az algoritmus 640x480 as méretű random generált fekete fehér képpel dolgozik. A (látványos) tesztelés érdekében a lementett nyers raw-file áthonvertálható az ffmpeg könyvtár segítségével png-re.
+Az algoritmus megadott as méretű random generált fekete fehér képpel dolgozik, azért dolgozunk véletlenszerűen előállított bemenettel mert így tetszőlegesen változtatható a mérete. A (látványos) tesztelés érdekében a lementett nyers raw-file áthonvertálható az ffmpeg könyvtár segítségével png-re.
 
 Mindegyik beadandóhoz tartozik egy run.sh script a beadandó könyvtárában, ez lefordítja a programot, futtatja majd a kapott képet png-re konvertálja.
 
 
 # Időmérés
 
-Mindegyik program a futása során egyetlen egy számot küld ki az stdout-ra, ez az algoritmus tiszta futási ideje, kernelszámítással együtt. A projektek mappái mellett található egy Measurements mappa, a lefordított programok behelyezve, megfelelően elnevezve innen lehet futtatni az algoritmusokat, a measure_all.sh script segítségével. Az előre megadott paraméterek segítségével lefuttatja a programokat, és az eredményt az stdout-ról olvasva egy elemzésnél feldolgozandó .csv fileba menti.
+Mindegyik program a futása során egyetlen egy számot küld ki az stdout-ra, ez az algoritmus tiszta futási ideje, kernelszámítás nélkül. A projektek mappái mellett található egy Measurements mappa, a lefordított programok behelyezve, megfelelően elnevezve innen lehet futtatni az algoritmusokat, a measure_all.sh script segítségével. Az előre megadott paraméterek segítségével lefuttatja a programokat, és az eredményt az stdout-ról olvasva egy elemzésnél feldolgozandó .csv fileba menti.
 
 # Paraméterezhetősség
 
