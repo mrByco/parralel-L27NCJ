@@ -20,8 +20,11 @@ A guassian blur egyik tulajdonsága az algalmazott kernel mérete, ennek a sugar
 
 A képet vízszintes szeletekre bontva tudnak a szálak párhuzamosan dolgozni a képen. A szálak az eredményt a 2 dimenziós output float tömb szeparált részeire írják így írásnál nem lehet ütközés.
 
-# Választott technológia
-C# Threading.
+## További párhuzamosítás OpenCL esetében
+
+1. A párhuzamosítás pixelenként történik. A végleges kép pixeleinek kiszámlása külön szálon történik, akár egyszerre is. Így elméletben a kép pérete irrelevánsá válik amíg van elég szálunk.
+2. (Plusz feladata) A kép pixeleit alapul véve, a kép pixel helyett a kernel minden egyes pixelét vesszük külön szálnak. Ebben az esetben valószínűleg a szálkezelés már több erőforrást vesz igénybe mint a tényleges számítás.
+
 
 ## Eredmények
 
