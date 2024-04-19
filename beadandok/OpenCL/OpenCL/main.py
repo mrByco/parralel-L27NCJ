@@ -1,3 +1,5 @@
+import os
+import sys
 import numpy as np
 import pyopencl as cl
 import time
@@ -27,47 +29,27 @@ def blur_image_opencl(input_image, width, height, radius):
 
     start_time = current_timestamp_ms()
     platform = cl.get_platforms()[0]
+    #print(f"Using platform: {platform.name}")
     device = platform.get_devices()[0]
+    #print(f"Using device: {device.name}")
     context = cl.Context([device])
     queue = cl.CommandQueue(context)
 
     # Kernel code CONTINUE
-    kernel_code = """
-    __kernel void gaussian_blur(const int width, const int height, const int radius, __global const float *input, __global float *output, __global float *blur_kernel) {
-        
-        int x = get_global_id(0);
-        int y = get_global_id(1);
-        if (x >= width || y >= height) return;
-        
-        float sum = 0.0;
-        int kernel_diameter = 2 * radius + 1;
-        for (int ky = -radius; ky <= radius; ky++) {
-            for (int kx = -radius; kx <= radius; kx++) {
-                int nx = x + kx;
-                int ny = y + ky;
-                if (nx >= 0 && nx < width && ny >= 0 && ny < height) {
-                    float value = input[ny * width + nx];
-                    float weight = blur_kernel[(ky + radius) * kernel_diameter + (kx + radius)];
-                    sum += value * weight;
-                }
-            }
-        }
-        output[y * width + x] = sum;
-    }
-    """
+    cl_kernel_code = open('guassian_blur.cl', 'r').read()
 
     kernel = compute_kernel(radius)
     mf = cl.mem_flags
 
 
-    program = cl.Program(context, kernel_code).build()
+    program = cl.Program(context, cl_kernel_code).build()
 
     input_buf = cl.Buffer(context, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=input_image)
     output_buf = cl.Buffer(context, mf.WRITE_ONLY, input_image.nbytes)
     kernel_buf = cl.Buffer(context, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=kernel)
 
     end_time = current_timestamp_ms()
-    print(f"Initialization: {end_time - start_time} ms")
+    #print(f"Initialization: {end_time - start_time} ms")
     start_time = current_timestamp_ms()
     gaussian_blur = program.gaussian_blur
     gaussian_blur(queue, (width, height), None, np.int32(width), np.int32(height), np.int32(radius), input_buf,
@@ -76,13 +58,24 @@ def blur_image_opencl(input_image, width, height, radius):
     result = np.empty_like(input_image)
     cl.enqueue_copy(queue, result, output_buf).wait()
     end_time = current_timestamp_ms()
-    print(f"Execution: {end_time - start_time} ms")
+    #print(f"Execution: {end_time - start_time} ms")
+    print(f"{end_time - start_time}")
     return result
 
 
 def main():
-    radius = 20
-    width, height = 640, 480
+    # get args, resolution radois and threads
+
+    os.chdir(sys.path[0])   
+    
+    if len(sys.argv) != 4:
+        print("Usage: python main.py <radious> <radius> <threads>")
+        print("Threads are not just there for the interface (compare to cpu version)")
+        sys.exit(1)
+    
+    radius = int(sys.argv[2])
+    int("15")
+    width, height = int(sys.argv[1]), int(sys.argv[1])
     input_image = np.random.rand(height, width).astype(np.float32)
 
     output_image = blur_image_opencl(input_image, width, height, radius)
@@ -93,7 +86,7 @@ def main():
                 (output_image - output_image.min()) / (output_image.max() - output_image.min()) * 255).astype(np.uint8)
 
     imageio.imwrite('blurred_image.png', output_image_normalized)
-    print("Image saved as blurred_image.png")
+    #print("Image saved as blurred_image.png")
 
 
 if __name__ == "__main__":
