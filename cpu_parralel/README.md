@@ -28,10 +28,9 @@ A képet vízszintes szeletekre bontva tudnak a szálak párhuzamosan dolgozni a
 
 ## Eredmények
 
-[Processzoron futó párhuzamosítások (2023)](https://github.com/mrByco/parralel-L27NCJ/tree/master/beadandok/CPU)
+Futtatási eredmények grafikonon, külömböző probléma méret esetén
 
-## Video kártyás párhuzamosítás
-
-
-[Videokártyán futó párhuzamosítások (2024)](https://github.com/mrByco/parralel-L27NCJ/tree/master/beadandok/OpenCL)
-
+![radius1](https://github.com/mrByco/parralel-L27NCJ/blob/master/beadandok/ResultImages/r1.png?raw=true)
+![radius3](https://github.com/mrByco/parralel-L27NCJ/blob/master/beadandok/ResultImages/r3.png?raw=true)
+![radius7](https://github.com/mrByco/parralel-L27NCJ/blob/master/beadandok/ResultImages/r7.png?raw=true)
+![radius20](https://github.com/mrByco/parralel-L27NCJ/blob/master/beadandok/ResultImages/r20.png?raw=true)
