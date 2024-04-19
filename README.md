@@ -14,7 +14,7 @@ Mindegyik program a futása során egyetlen egy számot küld ki az stdout-ra, e
 
 # Paraméterezhetősség
 
-A guassian blur egyik tulajdonsága az algalmazott kernel mérete, ennek a sugarát megadva lehet változtatni a program bonyolultságán.
+A guassian szűrő egyik tulajdonsága az algalmazott kernel mérete, ennek a sugarát megadva lehet változtatni a program bonyolultságán.
 
 # Párhuzamosítás
 
