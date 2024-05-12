@@ -39,3 +39,8 @@ A futási idő a párhuzamosítással csökkent addig a pontig, amíg át nem l�
 
 [Videokártyán futó párhuzamosítások (2024)](https://github.com/mrByco/parralel-L27NCJ/tree/master/beadandok/OpenCL)
 
+
+## Összefoglalás
+
+A repositoryban példa programkódok találhatóak a Gauss-szűrő mevalósítására, OpenCL és C környezetben. A készített programokhoz csatoltam a benchmarkokat, és elemeztem a további optimalizálás lehetőségeit is. A benchmarkokban vizsgáltam a problémaméretet befolyásoló két paraméter, a szűrő mérete és a kép mérete összefüggését a futási idővel a felhasznált platformokon.
+
