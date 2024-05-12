@@ -30,11 +30,13 @@ Konifguráció
 - GTX 1050 ti
 - Windows 11
 - 16gb ram
+### Futási idő ezred másodpercben a képméret (pixelek) függvényében, állandóra vett kernel mérettel
 
 ![Kép1](https://github.com/mrByco/parralel-L27NCJ/assets/20614904/bf74d28c-cee4-4ce2-8957-4b086c018fe9)
 
 *A futási időket méretenként összeadtuk, az így kapott eredmény a logaritmikus Y tengely
 
+### Futási idő ezred másodpercben a kernel méret (pixelek) függvényében, állandó képmérettel
 ![Kép2](https://github.com/mrByco/parralel-L27NCJ/assets/20614904/9f72353f-e419-4238-9017-f988e1cc5254)
 
 *A futási időket kernel méretenként összeadtuk, az így kapott eredmény a logaritmikus Y tengely
